@@ -1,0 +1,22 @@
+---
+- hosts: sample
+  sudo: yes
+  vars:
+    myuser: your-user
+    confrepo: /var/conferences
+    mydir: new-conf
+
+  vars_prompt:
+    - name: "conf"
+      prompt: "Conf name?"
+      private: no
+    - name: "year"
+      prompt: "Year ?"
+      private: no
+
+  tasks:
+  - file: path={{ confrepo }}/{{ conf }} state=directory mode=0750 owner=www-data group=sample
+  - copy: src=/media/{{ mydir }} dest={{ confrepo }}/{{ conf }} owner=www-data group=sample mode="u+rwx,g-w,o-rwx"
+  - stat: path={{ confrepo }}/{{ conf }}/{{ year }}
+    register: year_dir
+  - shell: chdir={{ confrepo }}/{{ conf }}/ mv {{ mydir }} {{ year }}
