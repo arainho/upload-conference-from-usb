@@ -6,7 +6,7 @@ $ apt-get install -y ssh rsync
 
 or
 
-$ yum -y install openssh-server openssh-clients
+$ yum -y install openssh-server openssh-clients rsync
 
 ### run the script on laptop (client machine)
 ./upload-conf.sh
