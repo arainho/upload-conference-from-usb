@@ -40,7 +40,16 @@ if mount | grep new-conf > /dev/null
 then
     echo "/dev/${YOUR_DRIVE}${PARTITION_NUMBER} mounted :-)"
 else
-    sudo mount "/dev/${YOUR_DRIVE}${PARTITION_NUMBER}" ${MEDIA_NEW_CONF}
+    # check number of partitions
+    NUMBER_OF_PARTITIONS=$(find /dev/${YOUR_DRIVE}* | wc -l)
+    if [ "${NUMBER_OF_PARTITIONS}" -eq 1 ]
+    then
+        # some fat32 usb drives of conferences must be mounted with the devicename, 
+        # no partition number required
+        sudo mount "/dev/${YOUR_DRIVE}" ${MEDIA_NEW_CONF}
+    else
+        sudo mount "/dev/${YOUR_DRIVE}${PARTITION_NUMBER}" ${MEDIA_NEW_CONF}
+    fi
 fi
 
 # “stty -echo”, “stty echo” used to disable the display of keyboard input,
